@@ -41,7 +41,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const handleAuthSuccess = async (userCredential: UserCredential) => {
     setUser(userCredential.user);
     setIsAuthenticated(true);
-    router.replace('/(drawer)');
+    router.replace('/(tabs)/home');
   };
 
   // Helper function to handle auth error
@@ -76,6 +76,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: '366564636514-n8t8s2rh9j5fshkd2kh8epeq3n46oscm.apps.googleusercontent.com',
+    iosClientId: '366564636514-n8t8s2rh9j5fshkd2kh8epeq3n46oscm.apps.googleusercontent.com',
+    androidClientId: '366564636514-n8t8s2rh9j5fshkd2kh8epeq3n46oscm.apps.googleusercontent.com',
     redirectUri: 'https://calmpulse-bdadb.firebaseapp.com/__/auth/handler',
     scopes: ['profile', 'email']
   });
@@ -135,10 +137,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signUp = async (email: string, password: string) => {
     try {
       setError(null);
-      await createUserWithEmailAndPassword(auth, email, password);
-      router.replace('/(drawer)');
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      await handleAuthSuccess(userCredential);
     } catch (e: any) {
-      setError(e.message);
+      handleAuthError(e);
     }
   };
 

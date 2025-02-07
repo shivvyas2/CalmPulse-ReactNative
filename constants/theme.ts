@@ -1,4 +1,26 @@
 export const COLORS = {
+  // Base colors
+  primary: '#D4F176',
+  primaryLight: '#E2F5A3',
+  primaryDark: '#BBD55E',
+  secondary: '#FFB800',
+  background: '#FFFFFF',
+  text: '#1A1A1A',
+  textSecondary: '#666666',
+  gray: '#666666',
+  cardBg: '#F8F9FA',
+  border: '#E8E8E8',
+  error: '#FF4D4D',
+  success: '#4CAF50',
+
+  // Tab Bar
+  tabBar: {
+    background: 'rgba(255,255,255,0.9)',
+    active: '#D4F176',
+    inactive: '#666666',
+  },
+
+  // Gradients
   primary: '#D4F176',
   primaryDark: '#BBD55E',
   secondary: '#FFB800',

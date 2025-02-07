@@ -10,7 +10,8 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.calmpulse.app"
+      "bundleIdentifier": "com.calmpulse.app",
+      "appleTeamId": "7Q32A84K45"
     },
     "android": {
       "adaptiveIcon": {
@@ -24,7 +25,6 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "scheme": "calmpulse",
     "extra": {
       "eas": {
         "projectId": "calmpulse-bdadb"

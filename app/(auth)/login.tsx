@@ -17,10 +17,10 @@ export default function LoginScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.header}>
-          <Image 
-            source={require('../../assets/images/logo.png')} 
-            style={styles.logo}
-          />
+          <View style={styles.logoContainer}>
+            <Text style={styles.logoText}>CalmPulse</Text>
+            <Ionicons name="leaf" size={32} color={COLORS.primary} style={styles.logoIcon} />
+          </View>
           <Text style={styles.title}>Welcome to CalmPulse</Text>
           <Text style={styles.subtitle}>Sign in to continue</Text>
         </View>
@@ -30,24 +30,32 @@ export default function LoginScreen() {
         )}
         
         <View style={styles.form}>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
-            keyboardType="email-address"
-            returnKeyType="next"
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            returnKeyType="go"
-            onSubmitEditing={() => signIn(email, password)}
-          />
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              returnKeyType="next"
+              autoComplete="email"
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              returnKeyType="go"
+              onSubmitEditing={() => signIn(email, password)}
+              autoComplete="off"
+              textContentType="oneTimeCode"
+              autoCapitalize="none"
+            />
+          </View>
           <TouchableOpacity 
             style={[styles.button, styles.loginButton]}
             onPress={() => signIn(email, password)}
@@ -102,6 +110,28 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: SPACING.xl,
+  },
+  logoText: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: COLORS.primary,
+    marginRight: SPACING.sm,
+  },
+  logoIcon: {
+    marginLeft: SPACING.xs,
+  },
+  inputContainer: {
+    marginBottom: SPACING.md,
+    width: '100%',
+    backgroundColor: '#f5f5f5',
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
   socialButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -113,9 +143,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: SPACING.sm,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#ffffff',
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#e0e0e0',
+    borderRadius: 8,
+    paddingVertical: SPACING.sm,
+    elevation: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 1,
   },
   socialButtonText: {
     color: '#000',

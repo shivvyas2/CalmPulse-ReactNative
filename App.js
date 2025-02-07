@@ -1,24 +1,22 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import OnboardingScreen from './src/screens/OnboardingScreen';
-import BreathingModeScreen from './src/screens/BreathingModeScreen';
-import AudioLibraryScreen from './src/screens/AudioLibraryScreen';
-
-const Stack = createNativeStackNavigator();
+import 'expo-dev-client';
+import { useEffect } from 'react';
+import { View } from 'react-native';
+import { AuthProvider } from './context/AuthContext';
+import { app } from './config/firebase';
 
 export default function App() {
+  useEffect(() => {
+    // Initialize Firebase app
+    if (app) {
+      console.log('Firebase initialized successfully');
+    }
+  }, []);
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator 
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-        <Stack.Screen name="BreathingMode" component={BreathingModeScreen} />
-        <Stack.Screen name="AudioLibrary" component={AudioLibraryScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <AuthProvider>
+      <View style={{ flex: 1 }}>
+        {/* Your app content will be rendered here by Expo Router */}
+      </View>
+    </AuthProvider>
   );
 }
