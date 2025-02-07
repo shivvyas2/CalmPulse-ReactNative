@@ -1,9 +1,6 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '../../constants/theme';
 import { CustomTabBar } from '../../components/CustomTabBar';
+import { COLORS } from '../../constants/theme';
 
 export default function TabLayout() {
   return (
@@ -20,24 +17,22 @@ export default function TabLayout() {
       <Tabs.Screen
         name="home"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <Ionicons name="home" size={24} color={color} />,
+          title: 'Home'
         }}
       />
       <Tabs.Screen
         name="breathing"
         options={{
-          title: 'Breathe',
-          tabBarIcon: ({ color }) => <Ionicons name="leaf" size={24} color={color} />,
+          title: 'Breathe'
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
-          title: 'Profile',
-          tabBarIcon: ({ color }) => <Ionicons name="person" size={24} color={color} />,
+          title: 'Profile'
         }}
       />
     </Tabs>
   );
 }
+

@@ -1,28 +1,21 @@
 import React from 'react';
-import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  Platform,
-  Dimensions,
-} from 'react-native';
-import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { LinearGradient } from 'expo-linear-gradient';
-import { COLORS } from '@/constants/theme';
-import Animated, {
-  useAnimatedStyle,
-  withSpring,
-  interpolate,
-} from 'react-native-reanimated';
+import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { BlurView } from 'expo-blur';
+import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Animated, { withSpring, useAnimatedStyle } from 'react-native-reanimated';
+import { COLORS } from '../constants/theme';
 
 const { width } = Dimensions.get('window');
 const TAB_WIDTH = width / 3;
 
-export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
+export function CustomTabBar({ state, descriptors, navigation }) {
+  const insets = useSafeAreaInsets();
+
   return (
-    <View style={styles.container}>
-      <View style={styles.background}>
-        <View style={styles.tabContainer}>
+    <View style={[styles.container, { paddingBottom: insets.bottom }]}>
+      <BlurView intensity={80} tint="light" style={styles.blurContainer}>
+        <View style={styles.tabsContainer}>
           {state.routes.map((route, index) => {
             const { options } = descriptors[route.key];
             const isFocused = state.index === index;
@@ -31,7 +24,6 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
               const event = navigation.emit({
                 type: 'tabPress',
                 target: route.key,
-                canPreventDefault: true,
               });
 
               if (!isFocused && !event.defaultPrevented) {
@@ -42,123 +34,91 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
             const animatedIconStyle = useAnimatedStyle(() => {
               return {
                 transform: [
-                  {
-                    scale: withSpring(isFocused ? 1.1 : 1, SPRING_CONFIG),
-                  },
-                  {
-                    translateY: withSpring(isFocused ? -4 : 0, SPRING_CONFIG),
-                  },
-                ],
-                opacity: withSpring(isFocused ? 1 : 0.7, SPRING_CONFIG),
+                  { scale: withSpring(isFocused ? 1.2 : 1) },
+                  { translateY: withSpring(isFocused ? -8 : 0) }
+                ]
               };
             });
 
-            const animatedBackgroundStyle = useAnimatedStyle(() => {
-              return {
-                transform: [
-                  {
-                    scale: withSpring(isFocused ? 1 : 0, SPRING_CONFIG),
-                  },
-                ],
-                opacity: withSpring(isFocused ? 1 : 0, SPRING_CONFIG),
-              };
-            });
+            let iconName;
+            if (route.name === 'home') {
+              iconName = isFocused ? 'home' : 'home-outline';
+            } else if (route.name === 'breathing') {
+              iconName = isFocused ? 'leaf' : 'leaf-outline';
+            } else if (route.name === 'profile') {
+              iconName = isFocused ? 'person' : 'person-outline';
+            }
 
             return (
               <TouchableOpacity
-                key={route.key}
+                key={index}
                 onPress={onPress}
-                style={styles.tab}
+                style={styles.tabButton}
                 activeOpacity={0.7}
               >
-                <View style={styles.tabContent}>
-                  <Animated.View style={[styles.activeBackground, animatedBackgroundStyle]} />
-                  <Animated.View style={animatedIconStyle}>
-                    {options.tabBarIcon?.({
-                      focused: isFocused,
-                      color: isFocused ? COLORS.primary : '#000',
-                      size: 24,
-                    })}
-                  </Animated.View>
-                </View>
+                <Animated.View style={[styles.iconContainer, animatedIconStyle]}>
+                  <Ionicons
+                    name={iconName}
+                    size={24}
+                    color={isFocused ? COLORS.primary : '#8E8E93'}
+                  />
+                  {isFocused && (
+                    <View style={styles.dot} />
+                  )}
+                </Animated.View>
               </TouchableOpacity>
             );
           })}
         </View>
-      </View>
+      </BlurView>
     </View>
   );
 }
 
-const SPRING_CONFIG = {
-  damping: 15,
-  mass: 1,
-  stiffness: 120,
-};
-
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: Platform.OS === 'ios' ? 84 : 64,
-    paddingBottom: Platform.OS === 'ios' ? 20 : 0,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
+    bottom: 16,
+    left: 16,
+    right: 16,
+    borderRadius: 24,
     overflow: 'hidden',
-    borderTopWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.05)',
-    backdropFilter: 'blur(10px)',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: {
-          width: 0,
-          height: -2,
-        },
-        shadowOpacity: 0.05,
-        shadowRadius: 8,
-      },
-      android: {
-        elevation: 4,
-      },
-    }),
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
   },
-  background: {
-    flex: 1,
+  blurContainer: {
+    overflow: 'hidden',
+    borderRadius: 24,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
   },
-  tabContainer: {
+  tabsContainer: {
     flexDirection: 'row',
-    height: '100%',
-    paddingTop: 8,
-    paddingHorizontal: '15%',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
+    paddingVertical: 16,
+    paddingHorizontal: 8,
   },
-  tab: {
-    justifyContent: 'center',
+  tabButton: {
+    flex: 1,
     alignItems: 'center',
-    width: 60,
+    maxWidth: TAB_WIDTH,
   },
-  tabContent: {
+  iconContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: 40,
-    height: 40,
+    height: 48,
   },
-  activeBackground: {
-    position: 'absolute',
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    overflow: 'hidden',
-    backgroundColor: 'rgba(212, 241, 118, 0.15)',
-    borderWidth: 1,
-    borderColor: 'rgba(212, 241, 118, 0.3)',
-  },
-  activeGradient: {
-    width: '100%',
-    height: '100%',
-  },
+  dot: {
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: COLORS.primary,
+    marginTop: 4,
+  }
 });
+
