@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView, SafeAreaView, Platform } from 'react-native';
 import { Link } from 'expo-router';
 import { COLORS, FONTS, SPACING } from '../../constants/theme';
 import { useAuth } from '../../context/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function SignupScreen() {
-  const { signUp, error } = useAuth();
+  const { signUp, signInWithGoogle, signInWithApple, error } = useAuth();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -80,6 +80,32 @@ export default function SignupScreen() {
           >
             <Text style={[styles.buttonText, styles.signupButtonText]}>Sign Up</Text>
           </TouchableOpacity>
+
+          <View style={styles.divider}>
+            <View style={styles.dividerLine} />
+            <Text style={styles.dividerText}>or continue with</Text>
+            <View style={styles.dividerLine} />
+          </View>
+
+          <View style={styles.socialButtons}>
+            <TouchableOpacity 
+              style={[styles.button, styles.socialButton]}
+              onPress={signInWithGoogle}
+            >
+              <Ionicons name="logo-google" size={24} color="#000" />
+              <Text style={[styles.buttonText, styles.socialButtonText]}>Google</Text>
+            </TouchableOpacity>
+
+            {Platform.OS === 'ios' && (
+              <TouchableOpacity 
+                style={[styles.button, styles.socialButton]}
+                onPress={signInWithApple}
+              >
+                <Ionicons name="logo-apple" size={24} color="#000" />
+                <Text style={[styles.buttonText, styles.socialButtonText]}>Apple</Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
 
         <View style={styles.footer}>
@@ -96,6 +122,40 @@ export default function SignupScreen() {
 }
 
 const styles = StyleSheet.create({
+  socialButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: SPACING.md,
+  },
+  socialButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: SPACING.sm,
+    backgroundColor: '#f5f5f5',
+    borderWidth: 1,
+    borderColor: '#ddd',
+  },
+  socialButtonText: {
+    color: '#000',
+    marginLeft: SPACING.sm,
+  },
+  divider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: SPACING.xl,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#ddd',
+  },
+  dividerText: {
+    marginHorizontal: SPACING.md,
+    color: '#666',
+    fontSize: 14,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
