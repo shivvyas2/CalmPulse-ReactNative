@@ -1,6 +1,7 @@
 # CalmPulse 🧘‍♂️
 
 CalmPulse is a mindfulness and meditation app built with React Native and Expo, designed to help users manage stress and anxiety through guided breathing exercises and calming audio sessions.
+# Figma Files 
 [Figma](https://www.figma.com/design/btuFC1HspPg3FDOVZ5GIZW/CalmPulse?node-id=342-4583&t=xHmvTP3PiY7lAylm-1)
 ## Features
 
